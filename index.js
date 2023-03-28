@@ -25,43 +25,40 @@ app.get("/api/hello", function (req, res) {
 });
 
 // --------------CHALLENGE--------------
+app.get("/api/:date?", function (req, res) {
+  let date = req.params.date;
+  let unixFormat, utcFormat, dateObj;
 
-// Response object
-let response = {
-  unix: String,
-  utc: String
-};
+  // Test whether the input date is a number
+  let isUnix = !isNaN(Number(parseInt(date)));
 
-// Timestamp API endpoint
-app.get("/api/:date", (req, res) => {
-  let date_string = req.params.date;
-
-  // To check if the passed paramater is of date format ([project url]/api/2015-12-25)
-  if (date_string.includes("-")) {
-    response.unix = new Date(date_string).getTime();    // Returns date in milliseconds (UNIX)
-    response.utc = new Date(date_string).toUTCString(); // Returns date in UTC format
+  // If no date specified, use the current date
+  if (!date) {
+    dateObj = new Date();
   }
-  // Isn't a date, check for timestamp ([project url]/api/1451001600000)
-  else {
-    date_string = parseInt(date_string);
-    response.unix = new Date(date_string).getTime();    // Converts parsed milliseconds date into date and then converts it into milliseconds (UNIX)
-    response.utc = new Date(date_string).toUTCString(); // Converts parsed milliseconds date into date and then converts it into UTC format
+  // If the date is a UNIX Timestamp
+  else if (date && isUnix) {
+    unixFormat = parseInt(date);
+    dateObj = new Date(unixFormat);
+  }
+  // If the date is not a UNIX time stamp
+  else if (date && !isUnix) {
+    dateObj = new Date(date);
+  }
+  // If the date is of wrong format
+  if (dateObj.toString() === "Invalid Date") {
+    res.json({ error: "Invalid Date" });
+    return;
   }
 
-  // If the passed parameter is of invalid timestamp or date format ([project url]/api/lol)
-  if (!response.unix || !response.utc) return res.json({ error: "Invalid Date" });
+  unixFormat = dateObj.getTime();
+  utcFormat = dateObj.toUTCString();
 
-  res.json(response);
-})
-
-// Current Time API endpoint
-app.get("/api", (req, res) => {
-  response.unix = new Date().getTime();    // Returns current date in milliseconds (UNIX)
-  response.utc = new Date().toUTCString(); // Returns current date in UTC format
-
-  res.json(response);
+  res.json({
+    unix: unixFormat,
+    utc: utcFormat
+  });
 });
-
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT || 3001, function () {
