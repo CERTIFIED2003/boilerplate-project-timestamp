@@ -44,6 +44,8 @@ app.get("/api/:date", (req, res) => {
     response.utc = new Date(date).toUTCString(); // Converts parsed milliseconds date into date and then converts it into UTC format
   }
 
+  if (!response.unix || !response.utc) res.json({ error: "Invalid Date" });
+
   res.json(response);
 })
 
