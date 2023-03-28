@@ -27,12 +27,15 @@ app.get("/api/hello", function (req, res) {
 // Timestamp API endpoint
 app.get("/api/:date", (req, res) => {
   let response = {
-    unix: String
+    unix: String,
+    utc: String
   };
   let date = req.params.date;
 
+  // To check if the passed paramater is of date format (2003-12-31)
   if (date.includes("-")) {
-    response.unix = new Date(date).getTime();
+    response.unix = new Date(date).getTime();    // Returns date in milliseconds
+    response.utc = new Date(date).toUTCString(); // Returns date in UTC format
   }
   res.json(response);
 })
