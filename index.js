@@ -34,18 +34,18 @@ let response = {
 
 // Timestamp API endpoint
 app.get("/api/:date", (req, res) => {
-  let date = req.params.date;
+  let date_string = req.params.date;
 
   // To check if the passed paramater is of date format ([project url]/api/2015-12-25)
-  if (date.includes("-")) {
-    response.unix = new Date(date).getTime();    // Returns date in milliseconds (UNIX)
-    response.utc = new Date(date).toUTCString(); // Returns date in UTC format
+  if (date_string.includes("-")) {
+    response.unix = new Date(date_string).getTime();    // Returns date in milliseconds (UNIX)
+    response.utc = new Date(date_string).toUTCString(); // Returns date in UTC format
   }
   // Isn't a date, check for timestamp ([project url]/api/1451001600000)
   else {
-    date = parseInt(date);
-    response.unix = new Date(date).getTime();    // Converts parsed milliseconds date into date and then converts it into milliseconds (UNIX)
-    response.utc = new Date(date).toUTCString(); // Converts parsed milliseconds date into date and then converts it into UTC format
+    date_string = parseInt(date_string);
+    response.unix = new Date(date_string).getTime();    // Converts parsed milliseconds date into date and then converts it into milliseconds (UNIX)
+    response.utc = new Date(date_string).toUTCString(); // Converts parsed milliseconds date into date and then converts it into UTC format
   }
 
   // If the passed parameter is of invalid timestamp or date format ([project url]/api/lol)
