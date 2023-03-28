@@ -25,7 +25,7 @@ app.get("/api/hello", function (req, res) {
 });
 
 // Timestamp API endpoint
-app.get("/api/timestamp/:date", (req, res) => {
+app.get("/api/:date", (req, res) => {
   let response = {
     unix: String
   };
