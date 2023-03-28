@@ -37,6 +37,13 @@ app.get("/api/:date", (req, res) => {
     response.unix = new Date(date).getTime();    // Returns date in milliseconds
     response.utc = new Date(date).toUTCString(); // Returns date in UTC format
   }
+  // Isn't a date, check for timestamp (1451001600000)
+  else {
+    date = parseInt(date);
+    response.unix = new Date(date).getTime();    // Converts parsed milliseconds date into date and then converts it into milliseconds
+    response.utc = new Date(date).toUTCString(); // Converts parsed milliseconds date into date and then converts it into UTC format
+  }
+
   res.json(response);
 })
 
