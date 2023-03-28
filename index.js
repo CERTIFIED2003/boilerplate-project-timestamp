@@ -30,7 +30,7 @@ app.get("/api/:date?", function (req, res) {
   let unixFormat, utcFormat, dateObj;
 
   // Test whether the input date is a number
-  let isUnix = !isNaN(Number(parseInt(date)));
+  let isUnix = /^\d+$/.test(date);
 
   // If no date specified, use the current date
   if (!date) {
